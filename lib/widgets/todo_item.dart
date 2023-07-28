@@ -7,11 +7,15 @@ class ToDoItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      margin: EdgeInsets.only(bottom: 20),
       child: ListTile(
-        onTap: () {},
+        onTap: () {
+          print("Tapped");
+        },
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
         ),
+        contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
         tileColor: Colors.white,
         leading: Icon(
           Icons.check_box,
@@ -26,6 +30,8 @@ class ToDoItem extends StatelessWidget {
           ),
         ),
         trailing: Container(
+          padding: EdgeInsets.all(0),
+          margin: EdgeInsets.symmetric(vertical: 12),
           height: 35,
           width: 35,
           decoration: BoxDecoration(
@@ -36,7 +42,9 @@ class ToDoItem extends StatelessWidget {
             color: Colors.white,
             iconSize: 18,
             icon: Icon(Icons.delete),
-            onPressed: () {},
+            onPressed: () {
+              print("Delete");
+            },
           ),
         ),
       ),
