@@ -12,6 +12,14 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   final todoList = ToDo.todoList();
+  List<ToDo> _foundToDo = [];
+  final _todoController = TextEditingController();
+
+  @override
+  void initState() {
+    _foundToDo = todoList;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +45,7 @@ class _HomeState extends State<Home> {
                         ),
                       ),
                     ),
-                    for (ToDo todo in todoList)
+                    for (ToDo todo in _foundToDo.reversed)
                       ToDoItem(
                         todo: todo,
                         onToDoChanged: _handleToDoChange,
@@ -74,6 +82,7 @@ class _HomeState extends State<Home> {
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: TextField(
+                        controller: _todoController,
                         decoration: InputDecoration(
                           hintText: 'Add New To-DO List Item',
                           border: InputBorder.none,
@@ -90,7 +99,9 @@ class _HomeState extends State<Home> {
                           fontSize: 40,
                         ),
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        _addToDoItem(_todoController.text);
+                      },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: tdBlue,
                         minimumSize: Size(60, 60),
@@ -117,6 +128,32 @@ class _HomeState extends State<Home> {
     });
   }
 
+  void _runFilter(String enteredKeyword) {
+    List<ToDo> results = [];
+    if (enteredKeyword.isEmpty) {
+      results = todoList;
+    } else {
+      results = todoList
+          .where((item) => item.todoText!
+              .toLowerCase()
+              .contains(enteredKeyword.toLowerCase()))
+          .toList();
+    }
+
+    setState(() {
+      _foundToDo = results;
+    });
+  }
+
+  void _addToDoItem(String toDo) {
+    setState(() {
+      todoList.add(ToDo(
+          id: DateTime.now().millisecondsSinceEpoch.toString(),
+          todoText: toDo));
+    });
+    _todoController.clear();
+  }
+
   Widget searchBox() {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 15),
@@ -125,6 +162,7 @@ class _HomeState extends State<Home> {
         borderRadius: BorderRadius.circular(20),
       ),
       child: TextField(
+        onChanged: (value) => _runFilter(value),
         decoration: InputDecoration(
             contentPadding: EdgeInsets.all(0),
             prefixIcon: Icon(
