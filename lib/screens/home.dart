@@ -30,7 +30,10 @@ class Home extends StatelessWidget {
                     ),
                   ),
                 ),
-                for (ToDo todo in todoList) ToDoItem(),
+                for (ToDo todo in todoList)
+                  ToDoItem(
+                    todo: todo,
+                  ),
               ],
             ),
           )
